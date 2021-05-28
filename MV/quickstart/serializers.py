@@ -1,7 +1,8 @@
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
+#from rest_framework.exceptions import ValidationError
 
 from MV.quickstart import models
+
 
 
 class EmployeeCreateSerializer(serializers.ModelSerializer):
@@ -33,6 +34,7 @@ class EmployeeDeleteSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Employee
         fields = '__all__'
+
 
 class UserCreateSerializer(serializers.ModelSerializer):
 
@@ -86,7 +88,7 @@ class DepartamentUpdateSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class DepartamentListSerializer(serializers.ModelSerializer):
+class DepartamentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Departament
@@ -180,22 +182,11 @@ class StatusDetailSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class StatusUpdateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Status
-        fields = '__all__'
-
-
-class StatusListSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Status
-        fields = '__all__'
-
-
 class StatusDeleteSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Status
         fields = '__all__'
+
 
 class UserStatusCreateSerializer(serializers.ModelSerializer):
 
@@ -217,13 +208,9 @@ class UserStatusUpdateSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class UserStatusListSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.UserStatus
-        fields = '__all__'
-
-
 class UserStatusDeleteSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.UserStatus
         fields = '__all__'
+
+

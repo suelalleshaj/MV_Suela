@@ -11,7 +11,7 @@ class IsHR(BasePermission):
     def has_permission(self, request, view):
         try:
             user_status = UserStatus.object.filter(user=request.user, role_name='HR')
-            return True if user_status else False
+            return any([user_status.active for user_status in user_status])
         except Exception as e:
             logger.exception(e)
             logger.debug(error_message, exc_info=True)

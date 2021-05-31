@@ -8,6 +8,7 @@ from self import self
 from MV.quickstart.permissions import IsHR
 from MV.quickstart import models, serializers
 
+from .models import Departament
 
 class EmployeeCreate(generics.CreateAPIView):
     queryset = models.Employee.objects.all()
@@ -27,7 +28,7 @@ class EmployeeList(generics.ListAPIView):
     queryset = models.Employee.objects.all()
     serializer_class = serializers.EmployeeDetailSerializer
     filter_backends = [DjangoFilterBackend]
-    filter_fields = ['name', 'last_name', 'birth_date', 'user_id', 'departament_id']
+    filter_fields = ['name', 'last_name', 'birth_date', 'user_id', 'Departament_id']
 
    # def get_queryset(self):
     #    queryset = models.
@@ -72,7 +73,7 @@ class UserList(generics.ListAPIView):
     queryset = models.User.objects.all()
     serializer_class = serializers.UserDetailSerializer
     filter_backends = [DjangoFilterBackend]
-    filter_fields = ['name', 'last_name', 'birth_date', 'user_id', 'departament_id']
+    filter_fields = ['name', 'last_name', 'birth_date', 'user_id', 'Departament_id']
 
    # def get_queryset(self):
     #    queryset = models.
@@ -81,7 +82,6 @@ class UserDetail(generics.DetailAPIView):
     queryset = models.User.objects.all()
     serializer_class = serializers.UserDetailSerializer
     permission_classes = [IsAdminUser | IsHR]
-
 
 class UserUpdate(generics.UpdateAPIView):
     queryset = models.User.objects.all()
@@ -121,9 +121,9 @@ class DepartamentDelete(generics.DestroyAPIView):
     queryset = models.User.objects.all()
     serializer_class = serializers.DepartamentDetailSerializer
 
-    def delete(selfself, request, *args, **kwargs):
-        departament = models.Departament.objects.get(id=kwargs.get('pk'))
-        if not departament.active:
+    def delete(self, request, *args, **kwargs):
+        Departament = models.Departament.objects.get(id=kwargs.get('pk'))
+        if not Departament.active:
             return Response({'error_message':"Could not delete"},
             status = status.HTTP_405_METHOD_NOT_ALLOWED)
         return super(DepartamentDelete, self).delete(request = request, *args, **kwargs)
@@ -231,7 +231,7 @@ class UserStatusList(generics.ListAPIView):
     queryset = models.UserStatus.objects.all()
     serializer_class = serializers.UserStatusDetailSerializer
     filter_backends = [DjangoFilterBackend]
-    filter_fields = ['name', 'last_name', 'birth_date', 'user_id', 'departament_id']
+    filter_fields = ['name', 'last_name', 'birth_date', 'user_id', 'Departament_id']
 
    # def get_queryset(self):
     #    queryset = models.

@@ -1,10 +1,11 @@
 from rest_framework.permissions import BasePermission
 from django.utils.translation import ugettext_lazy as _
-from MV.quickstart.models import UserStatus
+from quickstart.models import UserStatus
 import logging
 
 logger = logging.getLogger(__name__)
 error_message = _("Improper Login. Attempted to log in as Anonymous User.")
+
 
 class IsHR(BasePermission):
 

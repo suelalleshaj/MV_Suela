@@ -1,23 +1,24 @@
 from django.urls import path
-from MV.quickstart import views
+from quickstart import views
 
 urlpatterns = [
-    path('employee/create/', views.EmployeeCreate.as_view(), name = 'create_employee'),
-    path('employee/list/', views.EmployeeList.as_view(), name = 'list_employee'),
-    path('employee/detail/<int:pk>/', views.EmployeeDetail.as_view(), name = 'detail_employee'),
-    path('employee/update/<int:pk>/', views.EmployeeUpdate.as_view(), name = 'update_employee'),
-    path('employee/delete/<int:pk>/', views.EmployeeDelete.as_view(), name = 'delete_employee'),
 
-    path('user/create/', views.UserCreate.as_view(), name = 'create_user'),
-    path('user/list/', views.UserList.as_view(), name = 'list_user'),
-    path('user/detail/<int:pk>/', views.UserDetail.as_view(), name = 'detail_user'),
-    path('user/update/<int:pk>/', views.UserUpdate.as_view(), name = 'update_user'),
-    path('user/delete/<int:pk>/', views.UserDelete.as_view(), name = 'delete_user'),
+    path('employee/create/', views.EmployeeCreate.as_view(), name='create_employee'),
+    path('employee/list/', views.EmployeeList.as_view(), name='list_employee'),
+    path('employee/detail/<int:pk>/', views.EmployeeDetail.as_view(), name='detail_employee'),
+    path('employee/update/<int:pk>/', views.EmployeeUpdate.as_view(), name='update_employee'),
+    path('employee/delete/<int:pk>/', views.EmployeeDelete.as_view(), name='delete_employee'),
 
-    path('departament/create/', views.DepartamentCreate.as_view(), name = 'create_departament'),
-    path('departament/detail/<int:pk>/', views.DepartamentDetail.as_view(), name = 'detail_departament'),
-    path('departament/update/<int:pk>/', views.DepartamentUpdate.as_view(), name = 'update_departament'),
-    path('departament/delete/<int:pk>/', views.DepartamentDelete.as_view(), name = 'delete_departament'),
+    path('user/create/', views.UserCreate.as_view(), name='create_user'),
+    path('user/list/', views.UserList.as_view(), name='list_user'),
+    path('user/detail/<int:pk>/', views.UserDetail.as_view(), name='detail_user'),
+    path('user/update/<int:pk>/', views.UserUpdate.as_view(), name='update_user'),
+    path('user/delete/<int:pk>/', views.UserDelete.as_view(), name='delete_user'),
+
+    path('departament/create/', views.DepartamentCreate.as_view(), name='create_departament'),
+    path('departament/detail/<int:pk>/', views.DepartamentDetail.as_view(), name='detail_departament'),
+    path('departament/update/<int:pk>/', views.DepartamentUpdate.as_view(), name='update_departament'),
+    path('departament/delete/<int:pk>/', views.DepartamentDelete.as_view(), name='delete_departament'),
 
     path('holidays/create/', views.HolidaysCreate.as_view(), name='create_holidays'),
     path('holidays/list/', views.HolidaysList.as_view(), name='list_holidays'),

@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-#from datetime import date
+
+
+# from datetime import date
 
 
 class Employee(models.Model):
@@ -9,7 +11,7 @@ class Employee(models.Model):
     last_name = models.CharField(max_length=20)
     birth_date = models.DateField()
     user_id = models.ForeignKey('UserStatus', on_delete=models.CASCADE, null=True, blank=True)
-    Departament_id = models.ForeignKey( 'Departament' , on_delete=models.DO_NOTHING, null=True, blank=True)
+    Departament_id = models.ForeignKey('Departament', on_delete=models.DO_NOTHING, null=True, blank=True)
     active = models.BooleanField(null=True)
     create_id = models.IntegerField(null=True, blank=True)
     leave = models.IntegerField()
@@ -17,6 +19,7 @@ class Employee(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class User(AbstractUser):
     person = models.OneToOneField(to=Employee, null=True, blank=True, on_delete=models.DO_NOTHING)
@@ -33,6 +36,7 @@ class Departament(models.Model):
     def __str__(self):
         return self.name
 
+
 class Holidays(models.Model):
     objects = None
     name = models.CharField(max_length=20)
@@ -42,16 +46,20 @@ class Holidays(models.Model):
     def __str__(self):
         return self.name
 
+
 class Permit(models.Model):
     objects = None
     name = models.CharField(max_length=20)
     year = models.IntegerField()
     employee_id = models.ForeignKey(to=Employee, on_delete=models.DO_NOTHING)
-    state = models.CharField(choices=[('draft', 'Draft'),('approved','Approved'),('cancel', 'Cancel')], max_length=30)
-    #default='draft', max_length=20
+    state = models.CharField(choices=[('draft', 'Draft'), ('approved', 'Approved'), ('cancel', 'Cancel')],
+                             max_length=30)
+
+    # default='draft', max_length=20
 
     def __str__(self):
         return self.name
+
 
 class Status(models.Model):
     objects = None
@@ -59,6 +67,7 @@ class Status(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class UserStatus(models.Model):
     objects = None

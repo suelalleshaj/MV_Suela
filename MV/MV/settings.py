@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'MV.quickstart',
+    'quickstart',
     'rest_framework',
 
 ]
@@ -132,4 +132,4 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10
 }
 
-AUTH_USER_MODEL = 'MV.quickstart.User'
+AUTH_USER_MODEL = 'quickstart.User'

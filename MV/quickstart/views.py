@@ -1,11 +1,13 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, status
-from rest_framework.permissions import IsAdminUser  # IsAuthenticated
+from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from .serializers import *
 
-from quickstart.permissions import IsHR
+from quickstart.permissions import IsHR, IsEmployee
 from quickstart import models, serializers
+
+from .models import Employee, Departament, UserStatus
 
 
 class EmployeeCreate(generics.CreateAPIView):
@@ -28,17 +30,27 @@ class EmployeeList(generics.ListAPIView):
     # filter_backends = [DjangoFilterBackend]
     # filter_fields = ['name', 'last_name', 'birth_date', 'user_id', 'Departament_id']
 
+    def get_queryset(self):
+
+        user_status = self.request.user.userstatus_set.all().values_list('status_id_name')
+
+        if 'HR' in user_status:
+            return self.queryset
+        if 'Departament Manager' in user_status:
+            return self.queryset.filter(Departament_id=Employee.objects.get(user_id=self.request.user).Departament_id)
+        if 'Employee' in user_status:
+            return self.queryset.filter(id=self.request.user.id)
 
 class EmployeeDetail(generics.RetrieveAPIView):
     queryset = models.Employee.objects.all()
     serializer_class = EmployeeDetailSerializer
-    permission_classes = [IsAdminUser | IsHR]
+    permission_classes = [IsHR]
 
 
 class EmployeeUpdate(generics.UpdateAPIView):
     queryset = models.Employee.objects.all()
     serializer_class = EmployeeDetailSerializer
-    permission_classes = [IsAdminUser | IsHR]
+    permission_classes = [IsHR]
 
 
 class EmployeeDelete(generics.DestroyAPIView):

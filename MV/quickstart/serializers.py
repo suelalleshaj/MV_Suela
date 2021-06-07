@@ -127,7 +127,7 @@ class HolidaysDeleteSerializer(serializers.ModelSerializer):
 class PermitCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Permit
-        exclude = {'create_id': {'read_only': True}}
+        fields = '__all__'
 
 
 class PermitDetailSerializer(serializers.ModelSerializer):
@@ -139,7 +139,7 @@ class PermitDetailSerializer(serializers.ModelSerializer):
 class PermitUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Permit
-        fields = '__all__'
+        exclude = {'state': {'read_only': True}}
 
 
 class PermitListSerializer(serializers.ModelSerializer):

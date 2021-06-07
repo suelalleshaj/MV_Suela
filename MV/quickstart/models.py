@@ -50,12 +50,10 @@ class Holidays(models.Model):
 class Permit(models.Model):
     objects = None
     name = models.CharField(max_length=20)
-    year = models.IntegerField()
+    date = models.DateField()
     employee_id = models.ForeignKey(to=Employee, on_delete=models.DO_NOTHING)
     state = models.CharField(choices=[('draft', 'Draft'), ('approved', 'Approved'), ('cancel', 'Cancel')],
                              max_length=30)
-
-    # default='draft', max_length=20
 
     def __str__(self):
         return self.name
@@ -71,9 +69,9 @@ class Status(models.Model):
 
 class UserStatus(models.Model):
     objects = None
-    employee_id = models.ForeignKey(to=Employee, on_delete=models.DO_NOTHING, null=True, blank=True)
+    user_id = models.ForeignKey(to=User, on_delete=models.DO_NOTHING, null=True, blank=True)
     status_id = models.ForeignKey(to=Status, on_delete=models.DO_NOTHING, null=True, blank=True)
     active = models.BooleanField(null=True)
 
     def __str__(self):
-        return f"{self.employee_id.name} - {self.status_id.name}"
+        return f"{self.user_id.name} - {self.status_id.name}"

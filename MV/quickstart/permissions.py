@@ -12,7 +12,7 @@ class IsHR(BasePermission):
     def has_permission(self, request, view):
         try:
             user_status = UserStatus.object.filter(user=request.user, role_name='HR')
-            return any([user_status.active for user_status in user_status])
+            return any([status.active for status in user_status])
         except Exception as e:
             logger.exception(e)
             logger.debug(error_message, exc_info=True)
@@ -23,7 +23,7 @@ class IsDepartamentManager(BasePermission):
     def has_permission(self, request, view):
         try:
             user_status = UserStatus.object.filter(user=request.user, role_name='Departament Manager')
-            return any([user_status.active for user_status in user_status])
+            return any([status.active for status in user_status])
         except Exception as e:
             logger.exception(e)
             logger.debug(error_message, exc_info=True)
@@ -34,7 +34,7 @@ class IsEmployee(BasePermission):
     def has_permission(self, request, view):
         try:
             user_status = UserStatus.object.filter(user=request.user, role_name='Employee')
-            return any([user_status.active for user_status in user_status])
+            return any([status.active for status in user_status])
         except Exception as e:
             logger.exception(e)
             logger.debug(error_message, exc_info=True)

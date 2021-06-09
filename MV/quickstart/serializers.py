@@ -1,6 +1,5 @@
 from rest_framework import serializers
 
-
 from quickstart import models
 
 
@@ -13,7 +12,7 @@ class EmployeeCreateSerializer(serializers.ModelSerializer):
 class EmployeeDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Employee
-        fields = '__all__'
+        exclude = {'state': {'read_only': True}}
 
 
 class EmployeeUpdateSerializer(serializers.ModelSerializer):
@@ -37,7 +36,7 @@ class EmployeeDeleteSerializer(serializers.ModelSerializer):
 class UserCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.User
-        exclude = {'create_id': {'read_only': True}}
+        fields = '__all__'
 
 
 class UserDetailSerializer(serializers.ModelSerializer):
@@ -97,7 +96,7 @@ class DepartamentDeleteSerializer(serializers.ModelSerializer):
 class HolidaysCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Holidays
-        exclude = {'create_id': {'read_only': True}}
+        fields = '__all__'
 
 
 class HolidaysDetailSerializer(serializers.ModelSerializer):
@@ -127,7 +126,7 @@ class HolidaysDeleteSerializer(serializers.ModelSerializer):
 class PermitCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Permit
-        fields = '__all__'
+        fields = ['name', 'date', 'employee_id']
 
 
 class PermitDetailSerializer(serializers.ModelSerializer):
@@ -139,7 +138,7 @@ class PermitDetailSerializer(serializers.ModelSerializer):
 class PermitUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Permit
-        exclude = {'state': {'read_only': True}}
+        fields = ['name', 'date', 'employee_id']
 
 
 class PermitListSerializer(serializers.ModelSerializer):
@@ -149,6 +148,12 @@ class PermitListSerializer(serializers.ModelSerializer):
 
 
 class PermitDeleteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Permit
+        fields = ['name', 'date', 'employee_id']
+
+
+class PermitApprovedSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Permit
         fields = '__all__'
@@ -176,6 +181,12 @@ class UserStatusCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.UserStatus
         exclude = {'create_id': {'read_only': True}}
+
+
+class UserStatusListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.UserStatus
+        fields = '__all__'
 
 
 class UserStatusDetailSerializer(serializers.ModelSerializer):

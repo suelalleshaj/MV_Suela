@@ -31,6 +31,7 @@ urlpatterns = [
     path('permit/detail/<int:pk>/', views.PermitDetail.as_view(), name='detail_permit'),
     path('permit/update/<int:pk>/', views.PermitUpdate.as_view(), name='update_permit'),
     path('permit/delete/<int:pk>/', views.PermitDelete.as_view(), name='delete_permit'),
+    path('permit/approved/<int:pk>/', views.PermitApproved.as_view(), name='approved_permit'),
 
     path('status/create/', views.StatusCreate.as_view(), name='create_statust'),
     path('status/detail/<int:pk>/', views.StatusDetail.as_view(), name='detail_status'),

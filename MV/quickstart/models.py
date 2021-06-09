@@ -2,9 +2,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 
-# from datetime import date
-
-
 class Employee(models.Model):
     objects = None
     name = models.CharField(max_length=20)
@@ -40,7 +37,7 @@ class Departament(models.Model):
 class Holidays(models.Model):
     objects = None
     name = models.CharField(max_length=20)
-    date = models.DateField()
+    date = models.DateField(null=True, blank=True)
     active = models.BooleanField(null=True)
 
     def __str__(self):
@@ -50,7 +47,7 @@ class Holidays(models.Model):
 class Permit(models.Model):
     objects = None
     name = models.CharField(max_length=20)
-    date = models.DateField()
+    date = models.DateField(null=True, blank=True)
     employee_id = models.ForeignKey(to=Employee, on_delete=models.DO_NOTHING)
     state = models.CharField(choices=[('draft', 'Draft'), ('approved', 'Approved'), ('cancel', 'Cancel')],
                              max_length=30)
@@ -69,9 +66,6 @@ class Status(models.Model):
 
 class UserStatus(models.Model):
     objects = None
-    user_id = models.ForeignKey(to=User, on_delete=models.DO_NOTHING, null=True, blank=True)
+    user_id = models.ForeignKey(to=User, on_delete=models.DO_NOTHING, null=True, blank=True, related_name="users")
     status_id = models.ForeignKey(to=Status, on_delete=models.DO_NOTHING, null=True, blank=True)
     active = models.BooleanField(null=True)
-
-    def __str__(self):
-        return f"{self.user_id.name} - {self.status_id.name}"

@@ -6,7 +6,7 @@ from quickstart import models
 class EmployeeCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Employee
-        exclude = {'create_id': {'read_only': True}}
+        fields = '__all__'
 
 
 class EmployeeDetailSerializer(serializers.ModelSerializer):
@@ -162,7 +162,7 @@ class PermitApprovedSerializer(serializers.ModelSerializer):
 class StatusCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Status
-        exclude = {'create_id': {'read_only': True}}
+        fields = '__all__'
 
 
 class StatusDetailSerializer(serializers.ModelSerializer):
@@ -180,7 +180,7 @@ class StatusDeleteSerializer(serializers.ModelSerializer):
 class UserStatusCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.UserStatus
-        exclude = {'create_id': {'read_only': True}}
+        fields = '__all__'
 
 
 class UserStatusListSerializer(serializers.ModelSerializer):

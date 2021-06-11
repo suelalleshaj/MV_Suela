@@ -1,15 +1,19 @@
+from tokenize import Token
+
+from django.contrib.auth import authenticate
+# from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, status
+from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
+from rest_framework.status import HTTP_401_UNAUTHORIZED
 
+# from .models import Employee, EmployeeTask
 from .serializers import *
 
 from quickstart.permissions import IsHR, IsEmployee, IsDepartamentManager
 from quickstart import models, serializers
-
-
-# from .models import Employee ,Departament, UserStatus
 
 
 class EmployeeCreate(generics.CreateAPIView):
@@ -142,9 +146,6 @@ class HolidaysCreate(generics.CreateAPIView):
     serializer_class = serializers.HolidaysCreateSerializer
     permission_classes = [IsHR]
 
-    #def post(self, HolidaysCreate=None, *args, **kwargs):
-     #   return HolidaysCreate.create(self, *args, **kwargs)
-
 
 class HolidaysList(generics.ListAPIView):
     queryset = models.Holidays.objects.all()
@@ -222,9 +223,6 @@ class StatusCreate(generics.CreateAPIView):
     queryset = models.Status.objects.all()
     serializer_class = serializers.StatusCreateSerializer
 
-    def post(self, PermitCreate=None, *args, **kwargs):
-        return PermitCreate.create(self, *args, **kwargs)
-
 
 class StatusDetail(generics.RetrieveAPIView):
     queryset = models.Status.objects.all()
@@ -247,9 +245,6 @@ class UserStatusCreate(generics.CreateAPIView):
     queryset = models.UserStatus.objects.all()
     serializer_class = serializers.UserStatusCreateSerializer
     permission_classes = [IsEmployee, IsDepartamentManager, IsHR]
-
-    def post(self, request, *args, **kwargs):
-        return UserStatusCreate.create(self, request, *args, **kwargs)
 
 
 class UserStatusList(generics.ListAPIView):
@@ -282,3 +277,16 @@ class UserStatusDelete(generics.DestroyAPIView):
             return Response({'error_message': "Could not delete"},
                             status=status.HTTP_405_METHOD_NOT_ALLOWED)
         return super(UserStatusDelete, self).delete(request=request, *args, **kwargs)
+
+
+@api_view(["POST"])
+def log(request):
+    username = request.data.get("username")
+    password = request.data.get("password")
+
+    user = authenticate(username=username, password=password)
+    if user:
+        return Response({"error": "Login failed"}, status=HTTP_401_UNAUTHORIZED)
+
+    token, _ = Token.objects.get_or_create(user=user)
+    return Response({"token": token.key})

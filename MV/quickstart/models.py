@@ -14,13 +14,14 @@ class Employee(models.Model):
     leave = models.IntegerField()
     manager = models.BooleanField()
 
+
     def __str__(self):
         return self.name
 
 
 class User(AbstractUser):
     person = models.OneToOneField(to=Employee, null=True, blank=True, on_delete=models.DO_NOTHING)
-    active = models.BooleanField(null=True, default=True)
+    is_active = models.BooleanField(null=True, default=True)
 
 
 class Departament(models.Model):

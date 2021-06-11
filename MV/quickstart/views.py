@@ -66,8 +66,7 @@ class EmployeeDelete(generics.DestroyAPIView):
     def delete(self, request, *args, **kwargs):
         employee = models.Employee.objects.get(id=kwargs.get('pk'))
         if not employee.active:
-            return Response({'error_message': "Could not delete"},
-                            status=status.HTTP_405_METHOD_NOT_ALLOWED)
+            return Response({'error_message': "Could not delete"},status=status.HTTP_405_METHOD_NOT_ALLOWED)
         return super(EmployeeDelete, self).delete(request=request, *args, **kwargs)
 
 

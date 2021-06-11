@@ -1,20 +1,19 @@
 from tokenize import Token
-
 from django.contrib.auth import authenticate
-# from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import generics, status
-#from rest_framework.decorators import api_view
+from rest_framework import generics
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.status import HTTP_401_UNAUTHORIZED
 from django.views.decorators.csrf import csrf_exempt
-# from .models import Employee, EmployeeTask
+from .models import Permit
 from .serializers import *
-
 from quickstart.permissions import IsHR, IsEmployee, IsDepartamentManager
 from quickstart import models, serializers
+from rest_pandas.renderers import PandasExcelRenderer
+from rest_pandas import PandasView
+import pandas
 
 
 class EmployeeCreate(generics.CreateAPIView):
@@ -64,12 +63,6 @@ class EmployeeDelete(generics.DestroyAPIView):
     serializer_class = serializers.EmployeeDeleteSerializer
     permission_classes = [IsEmployee | IsHR]
 
-    def delete(self, request, *args, **kwargs):
-        employee = models.Employee.objects.get(id=kwargs.get('pk'))
-        if not employee.active:
-            return Response({'error_message': "Could not delete"},status=status.HTTP_405_METHOD_NOT_ALLOWED)
-        return super(EmployeeDelete, self).delete(request=request, *args, **kwargs)
-
 
 class UserCreate(generics.CreateAPIView):
     queryset = models.User.objects.all()
@@ -82,7 +75,7 @@ class UserCreate(generics.CreateAPIView):
         request.data['create_id'] = request.user.id
         request.data._mutable = _mutable
 
-        return EmployeeCreate.create(self, request, *args, **kwargs)
+        return UserCreate.create(self, request, *args, **kwargs)
 
 
 class UserList(generics.ListAPIView):
@@ -107,13 +100,6 @@ class UserDelete(generics.DestroyAPIView):
     serializer_class = serializers.UserDeleteSerializer
     permission_classes = [IsEmployee | IsDepartamentManager | IsHR]
 
-    def delete(self, request, *args, **kwargs):
-        user.active = models.User.objects.get(id=kwargs.get('pk'))
-        if not user.active:
-            return Response({'error_message': "Could not delete"},
-                            status=status.HTTP_405_METHOD_NOT_ALLOWED)
-        return super(UserDelete, self).delete(request=request, *args, **kwargs)
-
 
 class DepartamentCreate(generics.CreateAPIView):
     queryset = models.User.objects.all()
@@ -137,18 +123,15 @@ class DepartamentDelete(generics.DestroyAPIView):
     queryset = models.User.objects.all()
     serializer_class = serializers.DepartamentDeleteSerializer
 
-    def delete(self, request, *args, **kwargs):
-        Departament = models.Departament.objects.get(id=kwargs.get('pk'))
-        if not Departament.active:
-            return Response({'error_message': "Could not delete"},
-                            status=status.HTTP_405_METHOD_NOT_ALLOWED)
-        return super(DepartamentDelete, self).delete(request=request, *args, **kwargs)
-
 
 class HolidaysCreate(generics.CreateAPIView):
     queryset = models.Holidays.objects.all()
     serializer_class = serializers.HolidaysCreateSerializer
     permission_classes = [IsHR]
+
+
+def post(self, HolidayCreate=None, *args, **kwargs):
+    return HolidayCreate.create(self, *args, **kwargs)
 
 
 class HolidaysList(generics.ListAPIView):
@@ -171,13 +154,6 @@ class HolidaysDelete(generics.DestroyAPIView):
     queryset = models.Holidays.objects.all()
     serializer_class = serializers.HolidaysDeleteSerializer
     permission_classes = [IsHR]
-
-    def delete(self, request, HolidaysDelete=None, *args, **kwargs):
-        holidays = models.Holidays.objects.get(id=kwargs.get('pk'))
-        if not holidays.active:
-            return Response({'error_message': "Could not delete"},
-                            status=status.HTTP_405_METHOD_NOT_ALLOWED)
-        return super(HolidaysDelete, self).delete(request=request, *args, **kwargs)
 
 
 class PermitCreate(generics.CreateAPIView):
@@ -209,19 +185,27 @@ class PermitDelete(generics.DestroyAPIView):
     serializer_class = serializers.PermitDeleteSerializer
     permission_classes = [IsDepartamentManager | IsHR]
 
-    def delete(self, request, PermitDelete=None, *args, **kwargs):
-        permit = models.Permit.objects.get(id=kwargs.get('pk'))
-        if not permit.active:
-            return Response({'error_message': "Could not delete"},
-                            status=status.HTTP_405_METHOD_NOT_ALLOWED)
-        return super(PermitDelete, self).delete(request=request, *args, **kwargs)
-
 
 class PermitApproved(generics.UpdateAPIView):
     queryset = models.Permit.objects.all()
     serializer_class = serializers.PermitApprovedSerializer
     permission_classes = [IsDepartamentManager | IsHR]
 
+
+class PermitView(PandasView):
+    queryset = Permit.objects.all()
+
+    def filter_queryset(self, qs):
+        return qs
+
+    serializer_class = PermitListSerializer
+    renderer_classes = [PandasExcelRenderer]
+
+    def get_pandas_filename(self, request, format):
+        if format in ('xls', 'xlsx'):
+            return "Data Export"
+        else:
+            return None
 
 class StatusCreate(generics.CreateAPIView):
     queryset = models.Status.objects.all()
@@ -236,13 +220,6 @@ class StatusDetail(generics.RetrieveAPIView):
 class StatusDelete(generics.DestroyAPIView):
     queryset = models.Status.objects.all()
     serializer_class = serializers.StatusDeleteSerializer
-
-    def delete(self, request, StatusDelete=None, *args, **kwargs):
-        status = models.Status.objects.get(id=kwargs.get('pk'))
-        if not status.active:
-            return Response({'error_message': "Could not delete"},
-                            status=status.HTTP_405_METHOD_NOT_ALLOWED)
-        return super(StatusDelete, self).delete(request=request, *args, **kwargs)
 
 
 class UserStatusCreate(generics.CreateAPIView):
@@ -275,12 +252,7 @@ class UserStatusDelete(generics.DestroyAPIView):
     serializer_class = serializers.UserStatusDeleteSerializer
     permission_classes = [IsAdminUser | IsHR]
 
-    def delete(self, request, *args, **kwargs):
-        userstatus = models.UserStatus.objects.get(id=kwargs.get('pk'))
-        if not userstatus.active:
-            return Response({'error_message': "Could not delete"},
-                            status=status.HTTP_405_METHOD_NOT_ALLOWED)
-        return super(UserStatusDelete, self).delete(request=request, *args, **kwargs)
+
 
 
 @csrf_exempt

@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, status
 #from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.status import HTTP_401_UNAUTHORIZED
@@ -282,11 +283,9 @@ class UserStatusDelete(generics.DestroyAPIView):
         return super(UserStatusDelete, self).delete(request=request, *args, **kwargs)
 
 
-#@api_view(["POST"])
-#def log(request):
 @csrf_exempt
-def index(request):
-
+@api_view(["POST"])
+def log(request):
     username = request.data.get("username")
     password = request.data.get("password")
 

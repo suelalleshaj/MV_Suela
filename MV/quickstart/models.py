@@ -14,7 +14,6 @@ class Employee(models.Model):
     leave = models.IntegerField()
     manager = models.BooleanField()
 
-
     def __str__(self):
         return self.name
 

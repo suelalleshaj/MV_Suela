@@ -23,24 +23,28 @@ class EmployeeCreate(generics.CreateAPIView):
 
 
 class EmployeeList(generics.ListAPIView):
+
+    def get_queryset(self):
+        user = self.request.user.users.all().values_list('status_id__name')
+
+        if ('HR',) in list(user):
+            return self.queryset
+
+        if ('Departamen_Manager',) in list(user):
+            employee = self.request.user.employee
+            manager_employee = models.Departament.objects.filter(departament_manager=employee.employee_no)
+            all_employee = models.Employee.objects.filter(department__departament_no__in=manager_employee)
+            return all_employee
+
+        if ('Employee',) in list(user):
+            user = self.request.user
+            employee = models.Employee.objects.filter(user=user)
+            return employee
+
     queryset = models.Employee.objects.all()
     serializer_class = EmployeeListSerializer
     permission_classes = [IsHR]
 
-
-# def get_queryset(self):
-
-#    user_status = self.request.user.users
-#   print(user_status)
-#  print("suela")
-# .all().values_list('status_id__name')
-
-# if 'HR' in user_status:
-#   return self.queryset
-# if 'Departament Manager' in user_status:
-#  return self.queryset.filter(Departament_id=Employee.objects.get(user_id=self.request.user).Departament_id)
-# if 'Employee' in user_status:
-#    return self.queryset.filter(id=self.request.user.id)
 
 class EmployeeDetail(generics.RetrieveAPIView):
     queryset = models.Employee.objects.all()

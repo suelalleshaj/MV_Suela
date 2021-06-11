@@ -12,7 +12,7 @@ class EmployeeCreateSerializer(serializers.ModelSerializer):
 class EmployeeDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Employee
-        exclude = {'state': {'read_only': True}}
+        fields = '__all__'
 
 
 class EmployeeUpdateSerializer(serializers.ModelSerializer):
@@ -66,7 +66,7 @@ class UserDeleteSerializer(serializers.ModelSerializer):
 class DepartamentCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Departament
-        exclude = {'create_id': {'read_only': True}}
+        fields = '__all__'
 
 
 class DepartamentDetailSerializer(serializers.ModelSerializer):
